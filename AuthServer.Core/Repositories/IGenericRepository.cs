@@ -11,11 +11,11 @@ namespace AuthServer.Core.Repositories
     {
         Task<TEntity> GetByIdAsync(int id);
 
-        Task<IQueryable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync();
 
         IQueryable<Task> Where(Expression<Func<TEntity, bool>> expression);
 
-         Task AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
 
         void Remove(TEntity entity);
 
