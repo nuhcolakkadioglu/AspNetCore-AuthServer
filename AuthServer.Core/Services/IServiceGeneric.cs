@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Services
 {
-//test
+
     public interface IServiceGeneric<TEntity, TDto> where TEntity : class where TDto : class
     {
         Task<Response<TDto>> GetByIdAsync(int id);
@@ -22,6 +22,6 @@ namespace AuthServer.Core.Services
         Task<Response<NoDataDto>> Remove(TEntity entity);
 
         Task<Response<NoDataDto>> Update(TEntity entity);
-        //end
+      
     }
 }
