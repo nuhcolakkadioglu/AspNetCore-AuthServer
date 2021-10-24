@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedLibrary.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Services
 {
-    public interface IServiceGeneric<TEntity,TDto> where TEntity:class where TDto:class
+    public interface IServiceGeneric<TEntity, TDto> where TEntity : class where TDto : class
     {
-        Task<TEntity> GetByIdAsync(int id);
+        Task<Response<TDto>> GetByIdAsync(int id);
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<Response<IEnumerable<TDto>>> GetAllAsync();
 
-        IQueryable<Task> Where(Expression<Func<TEntity, bool>> expression);
+        Task<Response<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> expression);
 
-        Task AddAsync(TEntity entity);
+        Task<Response<TDto>> AddAsync(TEntity entity);
 
-        void Remove(TEntity entity);
+        Task<Response<NoDataDto>> Remove(TEntity entity);
 
-        TEntity Update(TEntity entity);
+        Task<Response<NoDataDto>> Update(TEntity entity);
     }
 }
