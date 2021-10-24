@@ -21,5 +21,6 @@ namespace AuthServer.Core.Services
         Task<Response<NoDataDto>> Remove(TEntity entity);
 
         Task<Response<NoDataDto>> Update(TEntity entity);
+        //end
     }
 }
