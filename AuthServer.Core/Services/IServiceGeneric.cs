@@ -11,6 +11,8 @@ namespace AuthServer.Core.Services
 
     public interface IServiceGeneric<TEntity, TDto> where TEntity : class where TDto : class
     {
+        //buraya veri gelsin test branch
+       // public int Deneneme Branc { get; set; }
         Task<Response<TDto>> GetByIdAsync(int id);
 
         Task<Response<IEnumerable<TDto>>> GetAllAsync();
