@@ -13,6 +13,7 @@ namespace AuthServer.Core.Services
     {
         //buraya veri gelsin test branch
        // public int Deneneme Branc { get; set; }
+        //oo
         Task<Response<TDto>> GetByIdAsync(int id);
 
         Task<Response<IEnumerable<TDto>>> GetAllAsync();
