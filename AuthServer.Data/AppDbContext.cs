@@ -22,9 +22,10 @@ namespace AuthServer.Data
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Configurations fluentapideki verileri toplu şekilde okur
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-            base.OnModelCreating(builder);
+            base.OnModelCreating(builder);   
         }
     }
 }

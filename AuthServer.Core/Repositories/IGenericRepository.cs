@@ -13,7 +13,7 @@ namespace AuthServer.Core.Repositories
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 
-        IQueryable<Task> Where(Expression<Func<TEntity, bool>> expression);
+        IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression);
 
         Task AddAsync(TEntity entity);
 
