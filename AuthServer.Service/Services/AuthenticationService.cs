@@ -46,7 +46,7 @@ namespace AuthServer.Service.Services
             var refreshUserToken = await _userRefreshToken.Where(m => m.UserId == user.Id).SingleOrDefaultAsync();
             if (refreshUserToken == null)
             {
-                await _userRefreshToken.AddAsync(new UserRefreshToken { UserId = user.Id,Code=token.RefresToken,Expiration = token.RefreshTokenExpiration});
+                await _userRefreshToken.AddAsync(new UserRefreshToken { UserId = user.Id, Code = token.RefresToken, Expiration = token.RefreshTokenExpiration });
             }
             else
             {
@@ -57,19 +57,48 @@ namespace AuthServer.Service.Services
             return Response<TokenDto>.Success(token, 200);
         }
 
-        public Task<Response<ClientLoginDto>> CreateTokenByClient(ClientLoginDto loginDto)
+        public Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto loginDto)
         {
-            throw new NotImplementedException();
+            var client = _clients.SingleOrDefault(m => m.Id == loginDto.ClientId && m.Secret == loginDto.ClientSecret);
+            if (client == null)
+            {
+                return Response<ClientTokenDto>.Fail("client id yada secret bulunamadı", 404, true);
+            }
+            var token = _tokenService.CreateTokenByClient(client);
+            return Response<ClientTokenDto>.Success(token, 200);
         }
 
-        public Task<Response<TokenDto>> CreateTokenByRefeshToken(string refreshToken)
+
+        public async Task<Response<TokenDto>> CreateTokenByRefeshToken(string refToken)
         {
-            throw new NotImplementedException();
+            var refreshToken = await _userRefreshToken.Where(m => m.Code == refToken).SingleOrDefaultAsync();
+            if (refreshToken == null)
+            {
+                return Response<TokenDto>.Fail("refresh Token buluanamdı", 404, true);
+            }
+            var user = await _userManager.FindByIdAsync(refreshToken.UserId);
+            if (user == null)
+            {
+                return Response<TokenDto>.Fail("userId buluanamdı", 404, true);
+            }
+            var token = _tokenService.CreateToke(user);
+            refreshToken.Code = token.RefresToken;
+            refreshToken.Expiration = token.RefreshTokenExpiration;
+            await _unitOfWork.CommitAsync();
+
+            return Response<TokenDto>.Success(token, 200);
         }
 
-        public Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
+        public async Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var refresTok = await _userRefreshToken.Where(m => m.Code == refreshToken).SingleOrDefaultAsync();
+            if (refresTok == null)
+            {
+                return Response<NoDataDto>.Fail("refreshtoken yok", 4040, true);
+            }
+            _userRefreshToken.Remove(refresTok);
+            await _unitOfWork.CommitAsync();
+            return Response<NoDataDto>.Success(200);
         }
     }
 }
